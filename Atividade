@@ -1,0 +1,66 @@
+create database biblioteca;
+use biblioteca; 
+create table livro( 
+    idLivro serial not null PRIMARY KEY, 
+    titulo varchar(225) NOT NULL 
+);
+
+create table amigo( 
+    idAmigo serial not null PRIMARY KEY, 
+    nome varchar(225) NOT NULL, 
+    idade integer NOT NULL 
+);
+
+create table emprestimo( 
+    idEmprestimo serial not null PRIMARY KEY, 
+    dataEmp DATE, 
+    dataDev DATE, 
+    idAmigo int NOT NULL REFERENCES amigo(idAmigo), 
+    idLivro int NOT NULL REFERENCES livro(idLivro) 
+);
+
+INSERT INTO livro VALUES 
+(DEFAULT, 'Crepúsculo'), 
+(DEFAULT, 'Crepúsculo'), 
+(DEFAULT, 'Verity'), 
+(DEFAULT, 'Verity'), 
+(DEFAULT, 'Sapiens'),
+(DEFAULT, 'Sapiens'),
+(DEFAULT, 'Harry Potter'),
+(DEFAULT, 'Harry Potter'), 
+(DEFAULT, 'O pequeno príncipe');
+
+INSERT INTO amigo VALUES 
+(DEFAULT, 'Guilherme', 18), 
+(DEFAULT, 'David', 18), 
+(DEFAULT, 'Bruna', 11), 
+(DEFAULT, 'Bea', 20), 
+(DEFAULT, 'Cris', 30), 
+(DEFAULT, 'Matuê', 15), 
+(DEFAULT, 'Predella', 25), 
+(DEFAULT, 'Nog', 27), 
+(DEFAULT, 'Monark', 17);
+
+INSERT INTO emprestimo VALUES
+(DEFAULT, '2022-1-1', null, 6, 1), 
+(DEFAULT, '2019-5-15', '2019-6-15', 8, 3), 
+(DEFAULT, '2020-8-4', '2020-9-4', 7, 4), 
+(DEFAULT, '2018-7-12', '2018-7-12', 5, 3), 
+(DEFAULT, '2022-06-02', null, 8, 3), 
+(DEFAULT, '2021-4-10', '2021-5-10', 2, 2), 
+(DEFAULT, '2022-2-1', null, 4, 2), 
+(DEFAULT, '2022-3-2', null, 1, 3);
+
+SELECT l.titulo, a.nome, e.dataEmp, e.dataDev FROM emprestimo e 
+JOIN livro l ON e.idLivro = l.idLivro 
+JOIN amigo a ON a.idAmigo = e.idAmigo
+WHERE e.dataDev IS NULL;
+
+SELECT l.titulo, a.nome, e.dataEmp, e.dataDev FROM emprestimo e
+RIGHT JOIN livro l ON e.idLivro = l.idLivro 
+RIGHT JOIN amigo a ON a.idAmigo = e.idAmigo
+ORDER BY l.titulo ASC;
+
+SELECT l.titulo, e.dataEmp, e.dataDev FROM emprestimo e
+RIGHT JOIN livro l ON e.idLivro = l.idLivro 
+ORDER BY l.titulo ASC;
